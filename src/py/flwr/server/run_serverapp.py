@@ -79,7 +79,7 @@ def run_server_app() -> None:
     update_console_handler(
         level=DEBUG if args.verbose else INFO,
         timestamps=args.verbose,
-        colored=True,
+        colored=args.colored,
     )
 
     # Obtain certificates
@@ -196,6 +196,12 @@ def _parse_args_run_server_app() -> argparse.ArgumentParser:
         default=None,
         type=str,
         help="The version of the FAB used in the run.",
+    )
+    parser.add_argument(
+        "--colored",
+        default=True,
+        type=bool,
+        help="Enable colors in terminal",
     )
 
     return parser

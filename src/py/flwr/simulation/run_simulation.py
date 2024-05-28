@@ -55,6 +55,7 @@ def run_simulation_from_cli() -> None:
         app_dir=args.app_dir,
         enable_tf_gpu_growth=args.enable_tf_gpu_growth,
         verbose_logging=args.verbose,
+        colored=args.colored
     )
 
 
@@ -68,6 +69,7 @@ def run_simulation(
     backend_config: Optional[Dict[str, ConfigsRecordValues]] = None,
     enable_tf_gpu_growth: bool = False,
     verbose_logging: bool = False,
+    colored: bool = True
 ) -> None:
     r"""Run a Flower App using the Simulation Engine.
 
@@ -105,6 +107,8 @@ def run_simulation(
     verbose_logging : bool (default: False)
         When diabled, only INFO, WARNING and ERROR log messages will be shown. If
         enabled, DEBUG-level logs will be displayed.
+    colored : bool (default: True)
+        When diabled, diabled ANSI Escape Codes in logger.  
     """
     _run_simulation(
         num_supernodes=num_supernodes,
@@ -114,6 +118,7 @@ def run_simulation(
         backend_config=backend_config,
         enable_tf_gpu_growth=enable_tf_gpu_growth,
         verbose_logging=verbose_logging,
+        colored=colored
     )
 
 
@@ -246,6 +251,7 @@ def _run_simulation(
     app_dir: str = "",
     enable_tf_gpu_growth: bool = False,
     verbose_logging: bool = False,
+    colored: bool = True
 ) -> None:
     r"""Launch the Simulation Engine.
 
@@ -301,7 +307,7 @@ def _run_simulation(
     # Set logging level
     logger = logging.getLogger("flwr")
     if verbose_logging:
-        update_console_handler(level=DEBUG, timestamps=True, colored=True)
+        update_console_handler(level=DEBUG, timestamps=True, colored=colored)
     else:
         backend_config["silent"] = True
 
@@ -412,6 +418,12 @@ def _parse_args_run_simulation() -> argparse.ArgumentParser:
         help="Add specified directory to the PYTHONPATH and load"
         "ClientApp and ServerApp from there."
         " Default: current working directory.",
+    )
+    parser.add_argument(
+        "--colored",
+        default=True,
+        type=bool,
+        help="Enable colors in terminal",
     )
 
     return parser
